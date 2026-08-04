@@ -52,12 +52,12 @@ class SupervisedTrainingLoop:
 
         logger.debug("Forward step started")
 
-        images = batch["image"].unsqueeze(1).to(self.device) 
+        images = batch["image"].to(self.device) 
 
         logger.debug(f"Image shape: {tuple(images.shape)}")
 
         targets = {
-            k: v.unsqueeze(1).to(self.device)
+            k: v.to(self.device)
             for k, v in batch["targets"].items()
         }
 
