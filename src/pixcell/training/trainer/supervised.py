@@ -117,7 +117,10 @@ class SupervisedTrainingLoop:
                 f"Forward finished ({time.perf_counter()-t0:.3f}s)"
             )
 
+
             # AMP backward
+            t1 = time.perf_counter()
+
             self.scaler.scale(loss).backward()
 
             logger.debug(

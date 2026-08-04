@@ -15,7 +15,7 @@ from pixcell.data.data_loader.dataset import (
 from pixcell.data.data_loader import build_dataloader
 from pixcell.training.loss import build_loss
 from pixcell.training.optimizer import OptimizerBuilder
-from pixcell.evaluation.metrics import MetricBuilder
+from pixcell.evaluation.metrics import MetricBuilder, postprocessor
 from pixcell.training.scheduler import *
 from pixcell.training.trainer import SupervisedTrainingLoop
 from pixcell.utils import PathResolver
