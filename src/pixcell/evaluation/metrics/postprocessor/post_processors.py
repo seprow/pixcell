@@ -62,7 +62,7 @@ class ArgmaxPostProcessor(BasePostProcessor):
 
     def __call__(self, pred, target):
 
-        pred = pred.argmax(dim=self.dim, keepdim=self.keepdim)
+        pred = pred.argmax(dim=self.dim)
 
         return pred, target
 
@@ -106,6 +106,7 @@ def build_multiclass():
     return ComposePostProcessor([
         SoftmaxPostProcessor(),
         ArgmaxPostProcessor(),
+        OneHotPostProcessor(target=False)
     ])
 
 
