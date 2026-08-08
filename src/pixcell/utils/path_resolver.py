@@ -105,7 +105,7 @@ class PathResolver:
         filename = (
             f"{slice_id}.npy"
             if key is None
-            else f"{series_id}-{key}.npy"
+            else f"{slice_id}-{key}.npy"
         )
         return (
             self.annotation_output_dir
