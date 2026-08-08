@@ -56,13 +56,13 @@ class ThresholdPostProcessor(BasePostProcessor):
 @POSTPROCESSOR_REGISTRY.register("argmax")
 class ArgmaxPostProcessor(BasePostProcessor):
 
-    def __init__(self, dim=1, keepdim=True):
+    def __init__(self, dim=1, keepdim=False):
         self.dim = dim
         self.keepdim = keepdim
 
     def __call__(self, pred, target):
 
-        pred = pred.argmax(dim=self.dim)
+        pred = pred.argmax(dim=self.dim, keepdim=self.keepdim)
 
         return pred, target
 

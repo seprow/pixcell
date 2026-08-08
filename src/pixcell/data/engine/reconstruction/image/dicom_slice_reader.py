@@ -23,6 +23,9 @@ class DicomSliceReader(BaseImageReader):
 
         image = sitk.ReadImage(str(source))
 
+        if image.GetDimension() == 3 and image.GetSize()[2] == 1:
+            image = image[:, :, 0]
+
         return SliceImage(
             image=image,
             slice_id=(source.parent.name, source.stem),

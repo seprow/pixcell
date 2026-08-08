@@ -42,6 +42,8 @@ class NumpyToSitkConverter:
                 )
             ).image
 
+
+
         else:
             paths = [
                 self._path_resolver.slice_path(
@@ -54,6 +56,7 @@ class NumpyToSitkConverter:
             reference = self._volume_reader.read(
                 paths
             ).image
+
 
         image = sitk.GetImageFromArray(
             annotation.astype(np.uint8)
