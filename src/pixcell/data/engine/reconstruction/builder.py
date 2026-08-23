@@ -1,4 +1,5 @@
 from __future__ import annotations
+import SimpleITK as sitk
 
 from pathlib import Path
 
@@ -17,6 +18,7 @@ from pixcell.utils import (
     PathResolver,
     PickleIO,
     NumpyIO,
+    NiftiIO,
 )
 from pixcell.data.engine.reconstruction.annotation import (
     segmentation,
@@ -114,6 +116,11 @@ class Reconstruction:
 
         for item in iterable:
 
+            # nnunet case identifier
+            # case_id = f"P{item.patient_id}_S{item.series_id}"
+            case_id = f"P{item.patient_id}" # 18 series will be overwritten and lost.
+
+
             image = self._build_image(
                 image_reader,
                 item,
@@ -130,7 +137,10 @@ class Reconstruction:
 
 
             if self._config.data.reconstruction.cache:
-                self._save_image(image)
+                if self._config.data.use_nnunet_framework:
+                    self._save_nnunet(image.image, "image", case_id=case_id)
+                else:
+                    self._save_image(image)
 
             if self._config.data.reconstruction.load:
                 images[self._key(image)] = image
@@ -160,12 +170,15 @@ class Reconstruction:
 
 
                 if self._config.data.reconstruction.cache:
-                    self._save_annotation(
-                        annotation,
-                        target.task,
-                        target.builder,
-                        target.cache_key,
-                    )
+                    if self._config.data.use_nnunet_framework:
+                        self._save_nnunet(annotation.annotation, "annotation", case_id=case_id)
+                    else:
+                        self._save_annotation(
+                            annotation,
+                            target.task,
+                            target.builder,
+                            target.cache_key,
+                        )
 
                 if self._config.data.reconstruction.load:
                     annotations.setdefault(
@@ -323,6 +336,23 @@ class Reconstruction:
     ):
         
         annotation.save(self._paths, task, builder, cache_key)
+
+    def _save_nnunet(
+        self,
+        image: sitk.Image,
+        data_type: str,
+        case_id: str
+    ):
+        if data_type == "image":
+            path = self._paths.nnunet_image_path(case_id)
+
+        elif data_type == "annotation":
+            path = self._paths.nnunet_annotation_path(case_id)
+
+        NiftiIO.save(
+            image=image,
+            path=path,
+        )
 
 
     @staticmethod

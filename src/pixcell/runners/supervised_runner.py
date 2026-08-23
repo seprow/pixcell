@@ -72,7 +72,7 @@ class SupervisedRunner:
             if val_transform_pipeline is None:
                 return None
 
-            return TRANSFORM_PIPELINE.build(train_transform_pipeline)
+            return TRANSFORM_PIPELINE.build(val_transform_pipeline)
 
 
     def _build_trainer(self):

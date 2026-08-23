@@ -58,6 +58,21 @@ class NumpyIO:
     def load(path: Path):
 
         return np.load(path)
+
+class NiftiIO:
+
+    @staticmethod
+    def save(image: sitk.Image, path: Path):
+
+        path.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        sitk.WriteImage(
+            image,
+            str(path),
+        )
         
 
 def load_yaml(path):

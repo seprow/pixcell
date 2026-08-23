@@ -114,4 +114,30 @@ class PathResolver:
             / series_id
             / filename
         )
-    
+
+    # ---------- nnU-Net ----------
+
+    def nnunet_image_path(
+        self,
+        case_id: str,
+        channel: int = 0,
+    ) -> Path:
+
+        return (
+            self.processed_root
+            / "nnunet_dataset"
+            / "imagesTr"
+            / f"{case_id}_{channel:04d}.nii.gz"
+        )
+
+    def nnunet_annotation_path(
+        self,
+        case_id: str,
+    ) -> Path:
+
+        return (
+            self.processed_root
+            / "nnunet_dataset"
+            / "labelsTr"
+            / f"{case_id}.nii.gz"
+        )

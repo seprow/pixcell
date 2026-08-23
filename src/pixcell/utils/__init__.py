@@ -9,7 +9,8 @@ from .io import (
     read_json_file,
     load_checkpoint,
     PickleIO,
-    NumpyIO
+    NumpyIO,
+    NiftiIO
 )
 from .logger import setup_logger
 from .model_info import trainable_parameters_num, out_shape
@@ -31,5 +32,6 @@ __all__ = [
     "out_shape",
     "PickleIO",
     "NumpyIO",
-    "History"
+    "History",
+    "NiftiIO",
 ]

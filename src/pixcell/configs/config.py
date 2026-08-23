@@ -52,6 +52,17 @@ class DataConfig:
             Number of worker processes for data loading.
             More workers can speed up data loading but use more memory.
             Set to 0 to disable multiprocessing (useful for debugging).
+        use_nnunet_framework:
+            If enabled, data is stored as 3D volumes in `.nii.gz` format
+            following the nnU-Net dataset format and supported file standards.
+
+            Image and annotation volumes must be reconstructed using:
+                - `dicom_volume_reader`
+                - `multiclass_mask_volume`
+
+            See the official nnU-Net documentation for supported file formats
+            and dataset format requirements:
+            https://github.com/MIC-DKFZ/nnUNet/blob/master/documentation/dataset_format.md#supported-file-formats
 
     """
 
@@ -74,6 +85,8 @@ class DataConfig:
     batch_size: int = 64
     num_workers: Optional[int] = None
     pin_memory: bool = True
+
+    use_nnunet_framework: bool = False
     
 
 @dataclass
