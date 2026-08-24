@@ -20,6 +20,8 @@ class PathResolver:
             self.processed_root / "annotation" 
         )
 
+        self.nnunet_dir = self.processed_root / "nnUNet_raw" / "Dataset011_ICHSegmentation"
+
     # ---------- dicom ----------
 
     def series_path(self, series_id: str) -> Path:  
@@ -124,8 +126,7 @@ class PathResolver:
     ) -> Path:
 
         return (
-            self.processed_root
-            / "nnunet_dataset"
+            self.nnunet_dir
             / "imagesTr"
             / f"{case_id}_{channel:04d}.nii.gz"
         )
@@ -136,8 +137,7 @@ class PathResolver:
     ) -> Path:
 
         return (
-            self.processed_root
-            / "nnunet_dataset"
+            self.nnunet_dir
             / "labelsTr"
             / f"{case_id}.nii.gz"
         )
