@@ -1,0 +1,198 @@
+# Root Config
+
+relative_path: false
+
+# Data
+
+data:
+
+  data_directory: "/kaggle/input/datasets/seprow/iaaa3th-contest-bct/Data"
+
+  processed_data_directory: "/kaggle/working/processed_data"
+
+  dataset_subset: "annotated_and_labeled_slices"
+
+  train_val_split: 0.8
+
+  train_transform: "train_transform"
+
+  val_transform: "val_transform"
+
+  seed: 42
+
+  batch_size: 1
+
+  num_workers: 0
+
+  pin_memory: false
+
+  reconstruction:
+
+    enabled: true
+
+    cache: true
+
+    load: false
+
+    image:
+
+      reader: "dicom_volume_reader"
+
+    annotation:
+
+      targets:
+
+        - task: "ICH"
+          builder: "multiclass_mask_volume"
+          parameters: {}
+          cache_key: "all"
+
+    resample:
+
+      enabled: false
+
+      pipeline: "image_spacing_resampler"
+
+      image:
+
+        spacing: [0.5, 0.5, 5.0]
+
+        interpolator: "linear"
+
+        default_pixel_value: -1000
+
+      annotation:
+
+        spacing: [0.5, 0.5, 5.0]
+
+        interpolator: "nearest"
+
+        default_pixel_value: 0
+
+
+# Model
+
+model:
+
+  model: "model"
+
+
+# Training
+
+training:
+
+  checkpoint_directory: "checkpoints"
+
+  checkpoint_file: "best_model.pt"
+
+  resume: false
+
+  learning_mode: "supervised"
+
+  show_progress: true
+
+  use_amp: false
+
+  max_grad_norm: 1.0
+
+  num_epochs: 300
+
+  early_stopping_patience: 10
+
+  # Targets
+
+  targets:
+
+    - target_name: "ich_multiclass_segmentation_series"
+
+
+  # Loss
+
+  loss:
+
+    strategy: "sum"
+
+    strategy_params: {}
+
+    targets:
+
+      - target: "ich_multiclass_segmentation_series"
+
+        strategy: "weighted_sum"
+
+        strategy_params: {}
+
+        losses:
+
+          - name: "dice"
+
+            weight: 1
+
+            params:
+
+              include_background: False
+
+              softmax: True
+
+              reduction: mean
+
+  metrics:
+
+    - target: "ich_multiclass_segmentation_series"
+
+      metrics:
+
+        - name: dice
+
+          postprocessor: "multiclass_segmentation_dice"
+
+          params:
+
+            include_background: false
+
+            reduction: mean_batch
+            
+
+
+  # Optimizer
+
+  optimizer:
+
+    optimizer: "adam"
+
+    params:
+
+      lr: 0.0001
+
+      weight_decay: 0.00001
+
+
+
+  # Scheduler
+
+  scheduler:
+
+    name: "cosine"
+
+    step_per_batch: false
+
+    params:
+
+      T_max: 300
+
+
+# Logging
+
+logging:
+
+  log_directory: "logs"
+
+  log_file: "training.log"
+
+  log_level: "INFO"
+
+  log_to_file: true
+
+  log_to_console: true
+
+
